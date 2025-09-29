@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zama FHE Quiz</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #1e1f29, #2c2f48);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .quiz-container {
+      background: #ffffff;
+      color: #333;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      width: 450px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.7s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      color: #ffcc00;
+      margin-bottom: 10px;
+    }
+    .progress {
+      font-size: 14px;
+      margin-bottom: 15px;
+      color: #666;
+    }
+    .question {
+      font-size: 18px;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+    .options li {
+      margin: 10px 0;
+      text-align: left;
+    }
+    .options label {
+      display: block;
+      background: #f4f6ff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .options label:hover {
+      background: #e6e9ff;
+    }
+    button {
+      background: #ffcc00;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #e6b800;
+      transform: scale(1.05);
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .correct-answers {
+      text-align: left;
+      margin-top: 20px;
+      font-size: 14px;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Zama FHE Quiz</h1>
+    <div class="progress" id="progress">Question 1 of 5</div>
+    <div id="quiz">
+      <div class="question" id="question">Loading question...</div>
+      <ul class="options" id="options"></ul>
+      <button id="nextBtn">Next</button>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What does FHE stand for in Zama’s work?",
+        options: ["Fast Hardware Execution", "Fully Homomorphic Encryption", "Federated Homomorphic Environment", "Functional Hybrid Encryption"],
+        answer: 1
+      },
+      {
+        question: "What is a key advantage of FHE?",
+        options: ["Data can be processed while encrypted", "It removes the need for internet", "It only works offline", "It doubles storage capacity"],
+        answer: 0
+      },
+      {
+        question: "Which programming language powers most of Zama’s core libraries?",
+        options: ["Python", "Rust", "Go", "C"],
+        answer: 1
+      },
+      {
+        question: "Which Zama library is for machine learning on encrypted data?",
+        options: ["Concrete ML", "TensorFlow", "PyTorch", "Scikit-learn"],
+        answer: 0
+      },
+      {
+        question: "Where is Zama based?",
+        options: ["San Francisco", "London", "Paris", "Berlin"],
+        answer: 2
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let userAnswers = [];
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("nextBtn");
+    const quizEl = document.getElementById("quiz");
+    const progressEl = document.getElementById("progress");
+
+    function loadQuestion() {
+      const currentQuiz = quizData[currentQuestion];
+      questionEl.textContent = currentQuiz.question;
+      progressEl.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+      optionsEl.innerHTML = "";
+      currentQuiz.options.forEach((option, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<label><input type="radio" name="option" value="${index}"> ${option}</label>`;
+        optionsEl.appendChild(li);
+      });
+    }
+
+    nextBtn.addEventListener("click", () => {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) {
+        alert("Please select an answer!");
+        return;
+      }
+
+      const answer = parseInt(selected.value);
+      userAnswers.push(answer);
+
+      if (answer === quizData[currentQuestion].answer) {
+        score++;
+      }
+
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        quizEnd();
+      }
+    });
+
+    function quizEnd() {
+      let resultHTML = `<h2>You scored ${score} out of ${quizData.length} 🎉</h2>`;
+      resultHTML += `<div class="correct-answers"><h3>Correct Answers:</h3><ul>`;
+      quizData.forEach((q, i) => {
+        const correctText = q.options[q.answer];
+        const userText = q.options[userAnswers[i]];
+        resultHTML += `<li><b>Q${i+1}:</b> ${q.question}<br>
+          ✅ Correct: ${correctText}<br>
+          📝 Your Answer: ${userText || "Not Answered"}
+        </li><br>`;
+      });
+      resultHTML += `</ul></div>`;
+      resultHTML += `<button onclick="location.reload()">Play Again</button>`;
+      quizEl.innerHTML = resultHTML;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
