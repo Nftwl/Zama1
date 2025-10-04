@@ -1,195 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zama FHE Quiz</title>
   <style>
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #1e1f29, #2c2f48);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0e0e10, #18181b);
+      color: #f5f5f5;
       margin: 0;
-    }
-    .quiz-container {
-      background: #ffffff;
-      color: #333;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-      width: 450px;
+      padding: 0;
       text-align: center;
-      position: relative;
-      animation: fadeIn 0.7s ease-in-out;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    header {
+      background: #101014;
+      padding: 20px;
+      border-bottom: 2px solid #8b5cf6;
     }
-    h1 {
-      color: #ffcc00;
+
+    header h1 {
+      color: #8b5cf6;
+      font-size: 2rem;
       margin-bottom: 10px;
     }
-    .progress {
-      font-size: 14px;
-      margin-bottom: 15px;
-      color: #666;
+
+    header p {
+      color: #ccc;
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1rem;
     }
+
+    .quiz-container {
+      max-width: 700px;
+      background: #1f1f23;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+    }
+
     .question {
-      font-size: 18px;
-      margin: 15px 0;
-      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #f0eaff;
     }
-    .options {
-      list-style: none;
-      padding: 0;
-    }
-    .options li {
-      margin: 10px 0;
-      text-align: left;
-    }
-    .options label {
+
+    .options button {
       display: block;
-      background: #f4f6ff;
-      padding: 10px 15px;
-      border-radius: 8px;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      background: #27272a;
+      border: 1px solid #444;
+      color: #f5f5f5;
+      border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      font-size: 1rem;
     }
-    .options label:hover {
-      background: #e6e9ff;
+
+    .options button:hover {
+      background: #8b5cf6;
+      color: white;
     }
-    button {
-      background: #ffcc00;
+
+    #next-btn {
+      display: none;
+      background: #8b5cf6;
+      color: white;
+      padding: 10px 20px;
       border: none;
-      padding: 12px 20px;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
       margin-top: 15px;
-      transition: 0.3s;
     }
-    button:hover {
-      background: #e6b800;
-      transform: scale(1.05);
+
+    #next-btn:hover {
+      background: #7c3aed;
     }
-    #result {
+
+    #score-container {
+      display: none;
+      padding: 20px;
+      background: #18181b;
+      border-radius: 10px;
       margin-top: 20px;
+    }
+
+    #score-container h2 {
+      color: #8b5cf6;
+    }
+
+    footer {
+      margin-top: 30px;
+      background: #0f0f11;
+      padding: 20px;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #8b5cf6;
+      text-decoration: none;
+    }
+
+    .congrats {
+      color: #22c55e;
       font-weight: bold;
-    }
-    .correct-answers {
-      text-align: left;
       margin-top: 20px;
-      font-size: 14px;
-      background: #f9f9f9;
-      padding: 10px;
-      border-radius: 6px;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>🧠 Zama FHE Quiz</h1>
+    <p>Test your knowledge about <strong>Zama</strong> — the company pioneering <strong>Fully Homomorphic Encryption (FHE)</strong> for Web3 privacy & AI. Learn, play, and climb the leaderboard!</p>
+  </header>
+
   <div class="quiz-container">
-    <h1>Zama FHE Quiz</h1>
-    <div class="progress" id="progress">Question 1 of 5</div>
     <div id="quiz">
-      <div class="question" id="question">Loading question...</div>
-      <ul class="options" id="options"></ul>
-      <button id="nextBtn">Next</button>
-      <div id="result"></div>
+      <div id="question-container">
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+      </div>
+      <button id="next-btn">Next</button>
+    </div>
+    <div id="score-container">
+      <h2>Your Score: <span id="score"></span>/10</h2>
+      <div id="message"></div>
     </div>
   </div>
+
+  <footer>
+    <p>💡 Learn more about <a href="https://zama.ai" target="_blank">Zama.ai</a></p>
+    <p>Official members:  
+      <a href="https://x.com/randhindi">@randhindi</a> | 
+      <a href="https://x.com/pascalpaillier">@pascalpaillier</a> | 
+      <a href="https://x.com/MarcJoye">@MarcJoye</a> | 
+      <a href="https://x.com/jeremybsdonato">@jeremybsdonato</a>
+    </p>
+  </footer>
 
   <script>
     const quizData = [
       {
-        question: "What does FHE stand for in Zama’s work?",
-        options: ["Fast Hardware Execution", "Fully Homomorphic Encryption", "Federated Homomorphic Environment", "Functional Hybrid Encryption"],
-        answer: 1
-      },
-      {
-        question: "What is a key advantage of FHE?",
-        options: ["Data can be processed while encrypted", "It removes the need for internet", "It only works offline", "It doubles storage capacity"],
+        question: "What does FHE stand for?",
+        options: ["Fully Homomorphic Encryption", "Fast Hybrid Encryption", "Federated Homomorphic Encoding", "Functional Hash Encryption"],
         answer: 0
       },
       {
-        question: "Which programming language powers most of Zama’s core libraries?",
-        options: ["Python", "Rust", "Go", "C"],
+        question: "What is Zama’s main focus?",
+        options: ["AI video generation", "Homomorphic encryption for AI & Web3", "DeFi staking", "Layer-2 payments"],
         answer: 1
       },
       {
-        question: "Which Zama library is for machine learning on encrypted data?",
-        options: ["Concrete ML", "TensorFlow", "PyTorch", "Scikit-learn"],
+        question: "Who is the CEO of Zama?",
+        options: ["Marc Joye", "Rand Hindi", "Pascal Paillier", "Vitalik Buterin"],
+        answer: 1
+      },
+      {
+        question: "What programming language is Zama’s library built in?",
+        options: ["Python", "Rust", "C++", "Go"],
+        answer: 1
+      },
+      {
+        question: "What does FHE allow computations on?",
+        options: ["Only plaintext data", "Encrypted data without decrypting", "Only compressed data", "Blockchain transactions only"],
+        answer: 1
+      },
+      {
+        question: "Which sector can FHE revolutionize?",
+        options: ["Gaming", "Privacy in AI & Web3", "NFTs only", "DeFi yield farming"],
+        answer: 1
+      },
+      {
+        question: "Which product of Zama focuses on blockchain privacy?",
+        options: ["Concrete", "FHENet", "TFHE-rs", "ZamaChain"],
+        answer: 1
+      },
+      {
+        question: "What does Zama aim to combine FHE with?",
+        options: ["AI & Blockchain", "AR & VR", "Gaming", "Quantum Computing"],
         answer: 0
       },
       {
-        question: "Where is Zama based?",
-        options: ["San Francisco", "London", "Paris", "Berlin"],
-        answer: 2
+        question: "Who is one of Zama’s cryptography experts?",
+        options: ["Pascal Paillier", "Elon Musk", "Charles Hoskinson", "Andrej Karpathy"],
+        answer: 0
+      },
+      {
+        question: "What can FHE improve in Web3?",
+        options: ["Scalability only", "Privacy and data security", "Tokenomics", "UI design"],
+        answer: 1
       }
     ];
 
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const nextBtn = document.getElementById('next-btn');
+    const scoreContainer = document.getElementById('score-container');
+    const scoreEl = document.getElementById('score');
+    const messageEl = document.getElementById('message');
+
     let currentQuestion = 0;
     let score = 0;
-    let userAnswers = [];
-
-    const questionEl = document.getElementById("question");
-    const optionsEl = document.getElementById("options");
-    const nextBtn = document.getElementById("nextBtn");
-    const quizEl = document.getElementById("quiz");
-    const progressEl = document.getElementById("progress");
 
     function loadQuestion() {
-      const currentQuiz = quizData[currentQuestion];
-      questionEl.textContent = currentQuiz.question;
-      progressEl.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+      const q = quizData[currentQuestion];
+      questionEl.textContent = q.question;
       optionsEl.innerHTML = "";
-      currentQuiz.options.forEach((option, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `<label><input type="radio" name="option" value="${index}"> ${option}</label>`;
-        optionsEl.appendChild(li);
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = opt;
+        btn.onclick = () => selectAnswer(i);
+        optionsEl.appendChild(btn);
       });
     }
 
-    nextBtn.addEventListener("click", () => {
-      const selected = document.querySelector('input[name="option"]:checked');
-      if (!selected) {
-        alert("Please select an answer!");
-        return;
-      }
-
-      const answer = parseInt(selected.value);
-      userAnswers.push(answer);
-
-      if (answer === quizData[currentQuestion].answer) {
+    function selectAnswer(i) {
+      const correct = quizData[currentQuestion].answer;
+      if (i === correct) {
         score++;
       }
-
       currentQuestion++;
       if (currentQuestion < quizData.length) {
         loadQuestion();
       } else {
-        quizEnd();
+        endQuiz();
       }
-    });
+    }
 
-    function quizEnd() {
-      let resultHTML = `<h2>You scored ${score} out of ${quizData.length} 🎉</h2>`;
-      resultHTML += `<div class="correct-answers"><h3>Correct Answers:</h3><ul>`;
-      quizData.forEach((q, i) => {
-        const correctText = q.options[q.answer];
-        const userText = q.options[userAnswers[i]];
-        resultHTML += `<li><b>Q${i+1}:</b> ${q.question}<br>
-          ✅ Correct: ${correctText}<br>
-          📝 Your Answer: ${userText || "Not Answered"}
-        </li><br>`;
-      });
-      resultHTML += `</ul></div>`;
-      resultHTML += `<button onclick="location.reload()">Play Again</button>`;
-      quizEl.innerHTML = resultHTML;
+    function endQuiz() {
+      document.getElementById('quiz').style.display = 'none';
+      scoreContainer.style.display = 'block';
+      scoreEl.textContent = score;
+      if (score === quizData.length) {
+        messageEl.innerHTML = `<p class="congrats">🎉 Perfect Score! You’re a true Zama OG!</p>`;
+      } else if (score > 6) {
+        messageEl.innerHTML = `<p class="congrats">🔥 Great job! You really know Zama!</p>`;
+      } else {
+        messageEl.innerHTML = `<p>Keep learning about Zama and FHE — visit <a href='https://zama.ai' target='_blank'>zama.ai</a>!</p>`;
+      }
     }
 
     loadQuestion();
