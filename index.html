@@ -8,44 +8,54 @@
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
   body {
     font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
     background: linear-gradient(135deg, #fff8d6, #ffe344);
-    color: #222;
-    text-align: center;
-    overflow-x: hidden;
-    transition: background 0.5s, color 0.5s;
+    color: #222; text-align: center;
+    overflow-x: hidden; transition: 0.4s;
   }
-  body.dark {
-    background: linear-gradient(135deg, #1b1b2f, #2e2e4f);
-    color: #f0f0f0;
+  h1 { font-size: 2.3rem; margin-top: 20px; }
+  .stage {
+    display: none; margin: 40px auto;
+    background: white; border-radius: 20px;
+    width: 80%; max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 30px; transition: 0.4s;
   }
-  h1 { font-size: 2.4rem; margin-top: 20px; }
-  .stage { display: none; margin: 40px auto; background:white; border-radius:20px; width:80%; max-width:500px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; transition: all 0.5s ease; }
-  body.dark .stage { background:#2e2e4f; }
-  .active { display:block; animation: fadeIn 0.6s ease; }
-  @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  .active { display: block; animation: fadeIn 0.6s ease; }
+  @keyframes fadeIn { from{opacity:0; transform:translateY(15px);} to{opacity:1; transform:translateY(0);} }
   button {
-    background:#ffcc00; border:none; padding:12px 22px; border-radius:10px; font-weight:600; cursor:pointer; color:#222; font-size:1rem; margin-top:10px; transition:0.3s;
+    background: #ffcc00; border: none;
+    padding: 12px 22px; border-radius: 10px;
+    font-weight: 600; cursor: pointer; color: #222;
+    margin-top: 10px; transition: 0.3s;
   }
-  button:hover { background:#ffd633; transform:scale(1.05); }
-  .options button { display:block; margin:10px auto; width:80%; }
-  .progress { margin:20px auto; width:80%; height:12px; background:#f0f0f0; border-radius:10px; overflow:hidden; }
-  .progress-bar { height:12px; background:#ffcc00; width:0%; transition:width 0.4s ease; }
-  .confetti { font-size:2rem; animation: float 2s ease infinite; }
+  button:hover { background: #ffd633; transform: scale(1.05); }
+  .options button { display: block; margin: 10px auto; width: 80%; }
+  .progress { margin: 20px auto; width: 80%; height: 12px;
+    background: #f0f0f0; border-radius: 10px; overflow: hidden; }
+  .progress-bar { height: 12px; background: #ffcc00; width: 0%; transition: 0.4s ease; }
+  .leaderboard {
+    margin: 30px auto; width: 90%; max-width: 450px;
+    background: white; border-radius: 15px;
+    padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: left;
+  }
+  .leaderboard h3 { margin-top: 0; color: #b58900; }
+  .leaderboard ul { list-style: none; padding: 0; }
+  .leaderboard li {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+    display: flex; justify-content: space-between;
+  }
+  .confetti { font-size: 2rem; animation: float 2s ease infinite; }
   @keyframes float { 0%{transform:translateY(0);} 50%{transform:translateY(-10px);} 100%{transform:translateY(0);} }
-  .facts { margin-top:20px; font-size:0.9rem; font-style:italic; }
-  #particles-js { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; }
-  .toggle-dark { position:fixed; top:20px; right:20px; padding:10px 15px; border-radius:10px; background:#ffcc00; cursor:pointer; }
-  body.dark .toggle-dark { background:#444; color:#fff; }
+  .facts { margin-top: 20px; font-size: 0.9rem; font-style: italic; }
+  .quote { margin-top: 15px; font-size: 1rem; color: #888; }
 </style>
 </head>
 <body>
 
-<div id="particles-js"></div>
-
 <h1>🧠 Zama OG Builder Journey</h1>
-<div class="toggle-dark" onclick="toggleDark()">🌙 Dark Mode</div>
 <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
 
 <!-- Stage 1 -->
@@ -69,20 +79,20 @@
 
 <!-- Stage 3 -->
 <div class="stage" id="stage3">
-  <h2>Stage 2: Building Privacy</h2>
-  <p>What can you compute with FHE?</p>
+  <h2>Stage 2: Privacy Tech</h2>
+  <p>What can you compute using FHE?</p>
   <div class="options">
-    <button onclick="checkAnswer(false,0)">Only encrypted text</button>
     <button onclick="checkAnswer(true,10)">Encrypted data — without decrypting it 🔐</button>
     <button onclick="checkAnswer(false,0)">Only public data</button>
-    <button onclick="checkAnswer(false,0)">Images only</button>
+    <button onclick="checkAnswer(false,0)">Nothing, it’s impossible</button>
+    <button onclick="checkAnswer(false,0)">Plain text only</button>
   </div>
 </div>
 
 <!-- Stage 4 -->
 <div class="stage" id="stage4">
   <h2>Stage 3: Community Builder</h2>
-  <p>Enter your X handle to continue:</p>
+  <p>Enter your X handle to join the OG leaderboard:</p>
   <input type="text" id="handle" placeholder="@yourhandle" style="padding:10px;border-radius:10px;border:1px solid #ccc;">
   <br><br>
   <button onclick="nextStage()">Continue</button>
@@ -90,84 +100,106 @@
 
 <!-- Stage 5 -->
 <div class="stage" id="stage5">
-  <h2>Stage 4: OG Achieved 🏆</h2>
+  <h2>🏆 OG Achieved!</h2>
   <div class="confetti">🎉🎉🎉</div>
-  <p id="greeting">Congratulations! You’ve completed the Zama OG Builder Journey.</p>
-  <p>Your score: <span id="score-display">0</span> / 20</p>
-  <p>Keep building with <strong>@zama_fhe</strong> & <strong>@randhindi</strong> to shape the future of privacy tech 🔒</p>
+  <p id="greeting"></p>
+  <p>Your Score: <span id="score-display">0</span> / 20</p>
+  <p>Keep building with <strong>@zama_fhe</strong> & <strong>@randhindi</strong> 🔒</p>
   <button onclick="tweet()">Tweet My Achievement</button>
+  <button onclick="restart()">Play Again</button>
+  <div class="quote" id="quote"></div>
+</div>
+
+<!-- Leaderboard -->
+<div class="leaderboard" id="leaderboard">
+  <h3>🏅 Top OGs</h3>
+  <ul id="leaderboard-list"></ul>
 </div>
 
 <div class="facts" id="fact-display">💡 Did you know? FHE lets you compute on encrypted data without seeing it!</div>
 
-<audio id="clickSound"><source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg"></audio>
-<audio id="successSound"><source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mpeg"></audio>
-
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-  /* Particles background */
-  particlesJS("particles-js", {
-    "particles": {
-      "number": {"value": 60},
-      "size": {"value": 3},
-      "move": {"speed": 1},
-      "color": {"value":"#ffcc00"},
-      "line_linked":{"enable":true,"color":"#ffcc00"}
-    }
-  });
+let currentStage = 1;
+let score = 0;
 
-  let currentStage = 1;
-  let score = 0;
-  const facts = [
-    "💡 Did you know? FHE allows computations without decryption!",
-    "💡 FHE is being used for privacy-preserving analytics.",
-    "💡 Zama aims to make FHE accessible for developers.",
-    "💡 Your contributions can help advance privacy tech.",
-    "💡 Encrypt, compute, and decrypt safely with FHE!"
-  ];
+const facts = [
+  "💡 FHE allows computations without decryption.",
+  "💡 Zama makes privacy tech usable for everyone.",
+  "💡 Encrypted AI is possible using FHE.",
+  "💡 You can compute on private data without ever exposing it.",
+  "💡 Zama’s libraries help developers build private-by-design apps."
+];
 
-  function nextStage() {
-    document.getElementById('clickSound').play();
-    document.getElementById('stage'+currentStage).classList.remove('active');
-    currentStage++;
-    if(currentStage>5) return;
-    document.getElementById('stage'+currentStage).classList.add('active');
-    document.getElementById('progress-bar').style.width=((currentStage-1)/4)*100+'%';
-    randomFact();
-    if(currentStage===5){
-      const handle = document.getElementById('handle').value || '';
-      document.getElementById('greeting').innerText=`Congratulations ${handle}! You’ve completed the Zama OG Builder Journey.`;
-      document.getElementById('score-display').innerText=score;
-      document.getElementById('successSound').play();
-    }
-  }
-
-  function checkAnswer(correct, points) {
-    document.getElementById('clickSound').play();
-    if(correct){
-      score += points;
-      alert("✅ Correct! Moving forward...");
-      nextStage();
+function nextStage() {
+  document.getElementById('stage'+currentStage).classList.remove('active');
+  currentStage++;
+  if (currentStage > 5) return;
+  document.getElementById('stage'+currentStage).classList.add('active');
+  document.getElementById('progress-bar').style.width = ((currentStage-1)/4)*100 + '%';
+  randomFact();
+  if (currentStage === 5) {
+    const handle = document.getElementById('handle').value || 'Anonymous';
+    document.getElementById('greeting').innerText = `Congratulations ${handle}! You’ve completed the Zama OG Builder Journey.`;
+    document.getElementById('score-display').innerText = score;
+    saveScore(handle, score);
+    updateLeaderboard();
+    if (score === 20) {
+      document.getElementById('quote').innerText = "💫 Zama OG Confirmed! You're an encryption wizard!";
     } else {
-      alert("❌ Oops! Try again.");
+      document.getElementById('quote').innerText = "✨ Keep learning — the OG path never ends.";
     }
   }
+}
 
-  function tweet() {
-    const handle = document.getElementById('handle').value || '';
-    const text = `I just completed the Zama OG Builder Journey 🧠✨\nScore: ${score}/20\nBuilding with @zama_fhe & @randhindi\n#Zama #FHE #Web3 ${handle}`;
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-    window.open(url,'_blank');
+function checkAnswer(correct, points) {
+  if (correct) {
+    score += points;
+    alert("✅ Correct!");
+    nextStage();
+  } else {
+    alert("❌ Try again!");
   }
+}
 
-  function randomFact() {
-    const fact = facts[Math.floor(Math.random()*facts.length)];
-    document.getElementById('fact-display').innerText = fact;
-  }
+function tweet() {
+  const handle = document.getElementById('handle').value || '';
+  const text = `I just completed the Zama OG Builder Journey 🧠✨\nScore: ${score}/20\nBuilding with @zama_fhe & @randhindi\n#Zama #FHE #Web3 ${handle}`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+}
 
-  function toggleDark(){
-    document.body.classList.toggle('dark');
-  }
+function restart() {
+  score = 0;
+  currentStage = 1;
+  document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+  document.getElementById('stage1').classList.add('active');
+  document.getElementById('progress-bar').style.width = '0%';
+}
+
+function randomFact() {
+  const fact = facts[Math.floor(Math.random()*facts.length)];
+  document.getElementById('fact-display').innerText = fact;
+}
+
+function saveScore(handle, score) {
+  let leaderboard = JSON.parse(localStorage.getItem('zamaLeaderboard')) || [];
+  leaderboard.push({handle, score});
+  leaderboard.sort((a,b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0,5);
+  localStorage.setItem('zamaLeaderboard', JSON.stringify(leaderboard));
+}
+
+function updateLeaderboard() {
+  const list = document.getElementById('leaderboard-list');
+  list.innerHTML = '';
+  const leaderboard = JSON.parse(localStorage.getItem('zamaLeaderboard')) || [];
+  leaderboard.forEach((entry, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>#${i+1}</strong> ${entry.handle} <span>${entry.score}</span>`;
+    list.appendChild(li);
+  });
+}
+
+updateLeaderboard();
 </script>
 
 </body>
