@@ -1,252 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zama FHE Quiz</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0e0e10, #18181b);
-      color: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-
-    header {
-      background: #101014;
-      padding: 20px;
-      border-bottom: 2px solid #8b5cf6;
-    }
-
-    header h1 {
-      color: #8b5cf6;
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    header p {
-      color: #ccc;
-      max-width: 700px;
-      margin: 0 auto;
-      font-size: 1rem;
-    }
-
-    .quiz-container {
-      max-width: 700px;
-      background: #1f1f23;
-      margin: 30px auto;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
-    }
-
-    .question {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      color: #f0eaff;
-    }
-
-    .options button {
-      display: block;
-      width: 100%;
-      margin: 8px 0;
-      padding: 12px;
-      background: #27272a;
-      border: 1px solid #444;
-      color: #f5f5f5;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 1rem;
-    }
-
-    .options button:hover {
-      background: #8b5cf6;
-      color: white;
-    }
-
-    #next-btn {
-      display: none;
-      background: #8b5cf6;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-
-    #next-btn:hover {
-      background: #7c3aed;
-    }
-
-    #score-container {
-      display: none;
-      padding: 20px;
-      background: #18181b;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
-
-    #score-container h2 {
-      color: #8b5cf6;
-    }
-
-    footer {
-      margin-top: 30px;
-      background: #0f0f11;
-      padding: 20px;
-      color: #aaa;
-      font-size: 0.9rem;
-    }
-
-    footer a {
-      color: #8b5cf6;
-      text-decoration: none;
-    }
-
-    .congrats {
-      color: #22c55e;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zama OG Builder Journey 🧠</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #fff8d6, #ffe344);
+    color: #222;
+    text-align: center;
+    overflow-x: hidden;
+    transition: background 0.5s, color 0.5s;
+  }
+  body.dark {
+    background: linear-gradient(135deg, #1b1b2f, #2e2e4f);
+    color: #f0f0f0;
+  }
+  h1 { font-size: 2.4rem; margin-top: 20px; }
+  .stage { display: none; margin: 40px auto; background:white; border-radius:20px; width:80%; max-width:500px; box-shadow:0 4px 20px rgba(0,0,0,0.1); padding:30px; transition: all 0.5s ease; }
+  body.dark .stage { background:#2e2e4f; }
+  .active { display:block; animation: fadeIn 0.6s ease; }
+  @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  button {
+    background:#ffcc00; border:none; padding:12px 22px; border-radius:10px; font-weight:600; cursor:pointer; color:#222; font-size:1rem; margin-top:10px; transition:0.3s;
+  }
+  button:hover { background:#ffd633; transform:scale(1.05); }
+  .options button { display:block; margin:10px auto; width:80%; }
+  .progress { margin:20px auto; width:80%; height:12px; background:#f0f0f0; border-radius:10px; overflow:hidden; }
+  .progress-bar { height:12px; background:#ffcc00; width:0%; transition:width 0.4s ease; }
+  .confetti { font-size:2rem; animation: float 2s ease infinite; }
+  @keyframes float { 0%{transform:translateY(0);} 50%{transform:translateY(-10px);} 100%{transform:translateY(0);} }
+  .facts { margin-top:20px; font-size:0.9rem; font-style:italic; }
+  #particles-js { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; }
+  .toggle-dark { position:fixed; top:20px; right:20px; padding:10px 15px; border-radius:10px; background:#ffcc00; cursor:pointer; }
+  body.dark .toggle-dark { background:#444; color:#fff; }
+</style>
 </head>
 <body>
-  <header>
-    <h1>🧠 Zama FHE Quiz</h1>
-    <p>Test your knowledge about <strong>Zama</strong> — the company pioneering <strong>Fully Homomorphic Encryption (FHE)</strong> for Web3 privacy & AI. Learn, play, and climb the leaderboard!</p>
-  </header>
 
-  <div class="quiz-container">
-    <div id="quiz">
-      <div id="question-container">
-        <div class="question" id="question"></div>
-        <div class="options" id="options"></div>
-      </div>
-      <button id="next-btn">Next</button>
-    </div>
-    <div id="score-container">
-      <h2>Your Score: <span id="score"></span>/10</h2>
-      <div id="message"></div>
-    </div>
+<div id="particles-js"></div>
+
+<h1>🧠 Zama OG Builder Journey</h1>
+<div class="toggle-dark" onclick="toggleDark()">🌙 Dark Mode</div>
+<div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+
+<!-- Stage 1 -->
+<div class="stage active" id="stage1">
+  <h2>Welcome, Future Builder 👋</h2>
+  <p>Your journey into Fully Homomorphic Encryption begins now.</p>
+  <button onclick="nextStage()">Start Journey</button>
+</div>
+
+<!-- Stage 2 -->
+<div class="stage" id="stage2">
+  <h2>Stage 1: FHE Basics</h2>
+  <p>Which project is pioneering Fully Homomorphic Encryption (FHE)?</p>
+  <div class="options">
+    <button onclick="checkAnswer(true,10)">Zama 🧠</button>
+    <button onclick="checkAnswer(false,0)">Ethereum</button>
+    <button onclick="checkAnswer(false,0)">Solana</button>
+    <button onclick="checkAnswer(false,0)">Polygon</button>
   </div>
+</div>
 
-  <footer>
-    <p>💡 Learn more about <a href="https://zama.ai" target="_blank">Zama.ai</a></p>
-    <p>Official members:  
-      <a href="https://x.com/randhindi">@randhindi</a> | 
-      <a href="https://x.com/pascalpaillier">@pascalpaillier</a> | 
-      <a href="https://x.com/MarcJoye">@MarcJoye</a> | 
-      <a href="https://x.com/jeremybsdonato">@jeremybsdonato</a>
-    </p>
-  </footer>
+<!-- Stage 3 -->
+<div class="stage" id="stage3">
+  <h2>Stage 2: Building Privacy</h2>
+  <p>What can you compute with FHE?</p>
+  <div class="options">
+    <button onclick="checkAnswer(false,0)">Only encrypted text</button>
+    <button onclick="checkAnswer(true,10)">Encrypted data — without decrypting it 🔐</button>
+    <button onclick="checkAnswer(false,0)">Only public data</button>
+    <button onclick="checkAnswer(false,0)">Images only</button>
+  </div>
+</div>
 
-  <script>
-    const quizData = [
-      {
-        question: "What does FHE stand for?",
-        options: ["Fully Homomorphic Encryption", "Fast Hybrid Encryption", "Federated Homomorphic Encoding", "Functional Hash Encryption"],
-        answer: 0
-      },
-      {
-        question: "What is Zama’s main focus?",
-        options: ["AI video generation", "Homomorphic encryption for AI & Web3", "DeFi staking", "Layer-2 payments"],
-        answer: 1
-      },
-      {
-        question: "Who is the CEO of Zama?",
-        options: ["Marc Joye", "Rand Hindi", "Pascal Paillier", "Vitalik Buterin"],
-        answer: 1
-      },
-      {
-        question: "What programming language is Zama’s library built in?",
-        options: ["Python", "Rust", "C++", "Go"],
-        answer: 1
-      },
-      {
-        question: "What does FHE allow computations on?",
-        options: ["Only plaintext data", "Encrypted data without decrypting", "Only compressed data", "Blockchain transactions only"],
-        answer: 1
-      },
-      {
-        question: "Which sector can FHE revolutionize?",
-        options: ["Gaming", "Privacy in AI & Web3", "NFTs only", "DeFi yield farming"],
-        answer: 1
-      },
-      {
-        question: "Which product of Zama focuses on blockchain privacy?",
-        options: ["Concrete", "FHENet", "TFHE-rs", "ZamaChain"],
-        answer: 1
-      },
-      {
-        question: "What does Zama aim to combine FHE with?",
-        options: ["AI & Blockchain", "AR & VR", "Gaming", "Quantum Computing"],
-        answer: 0
-      },
-      {
-        question: "Who is one of Zama’s cryptography experts?",
-        options: ["Pascal Paillier", "Elon Musk", "Charles Hoskinson", "Andrej Karpathy"],
-        answer: 0
-      },
-      {
-        question: "What can FHE improve in Web3?",
-        options: ["Scalability only", "Privacy and data security", "Tokenomics", "UI design"],
-        answer: 1
-      }
-    ];
+<!-- Stage 4 -->
+<div class="stage" id="stage4">
+  <h2>Stage 3: Community Builder</h2>
+  <p>Enter your X handle to continue:</p>
+  <input type="text" id="handle" placeholder="@yourhandle" style="padding:10px;border-radius:10px;border:1px solid #ccc;">
+  <br><br>
+  <button onclick="nextStage()">Continue</button>
+</div>
 
-    const questionEl = document.getElementById('question');
-    const optionsEl = document.getElementById('options');
-    const nextBtn = document.getElementById('next-btn');
-    const scoreContainer = document.getElementById('score-container');
-    const scoreEl = document.getElementById('score');
-    const messageEl = document.getElementById('message');
+<!-- Stage 5 -->
+<div class="stage" id="stage5">
+  <h2>Stage 4: OG Achieved 🏆</h2>
+  <div class="confetti">🎉🎉🎉</div>
+  <p id="greeting">Congratulations! You’ve completed the Zama OG Builder Journey.</p>
+  <p>Your score: <span id="score-display">0</span> / 20</p>
+  <p>Keep building with <strong>@zama_fhe</strong> & <strong>@randhindi</strong> to shape the future of privacy tech 🔒</p>
+  <button onclick="tweet()">Tweet My Achievement</button>
+</div>
 
-    let currentQuestion = 0;
-    let score = 0;
+<div class="facts" id="fact-display">💡 Did you know? FHE lets you compute on encrypted data without seeing it!</div>
 
-    function loadQuestion() {
-      const q = quizData[currentQuestion];
-      questionEl.textContent = q.question;
-      optionsEl.innerHTML = "";
-      q.options.forEach((opt, i) => {
-        const btn = document.createElement('button');
-        btn.textContent = opt;
-        btn.onclick = () => selectAnswer(i);
-        optionsEl.appendChild(btn);
-      });
+<audio id="clickSound"><source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg"></audio>
+<audio id="successSound"><source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mpeg"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+  /* Particles background */
+  particlesJS("particles-js", {
+    "particles": {
+      "number": {"value": 60},
+      "size": {"value": 3},
+      "move": {"speed": 1},
+      "color": {"value":"#ffcc00"},
+      "line_linked":{"enable":true,"color":"#ffcc00"}
     }
+  });
 
-    function selectAnswer(i) {
-      const correct = quizData[currentQuestion].answer;
-      if (i === correct) {
-        score++;
-      }
-      currentQuestion++;
-      if (currentQuestion < quizData.length) {
-        loadQuestion();
-      } else {
-        endQuiz();
-      }
+  let currentStage = 1;
+  let score = 0;
+  const facts = [
+    "💡 Did you know? FHE allows computations without decryption!",
+    "💡 FHE is being used for privacy-preserving analytics.",
+    "💡 Zama aims to make FHE accessible for developers.",
+    "💡 Your contributions can help advance privacy tech.",
+    "💡 Encrypt, compute, and decrypt safely with FHE!"
+  ];
+
+  function nextStage() {
+    document.getElementById('clickSound').play();
+    document.getElementById('stage'+currentStage).classList.remove('active');
+    currentStage++;
+    if(currentStage>5) return;
+    document.getElementById('stage'+currentStage).classList.add('active');
+    document.getElementById('progress-bar').style.width=((currentStage-1)/4)*100+'%';
+    randomFact();
+    if(currentStage===5){
+      const handle = document.getElementById('handle').value || '';
+      document.getElementById('greeting').innerText=`Congratulations ${handle}! You’ve completed the Zama OG Builder Journey.`;
+      document.getElementById('score-display').innerText=score;
+      document.getElementById('successSound').play();
     }
+  }
 
-    function endQuiz() {
-      document.getElementById('quiz').style.display = 'none';
-      scoreContainer.style.display = 'block';
-      scoreEl.textContent = score;
-      if (score === quizData.length) {
-        messageEl.innerHTML = `<p class="congrats">🎉 Perfect Score! You’re a true Zama OG!</p>`;
-      } else if (score > 6) {
-        messageEl.innerHTML = `<p class="congrats">🔥 Great job! You really know Zama!</p>`;
-      } else {
-        messageEl.innerHTML = `<p>Keep learning about Zama and FHE — visit <a href='https://zama.ai' target='_blank'>zama.ai</a>!</p>`;
-      }
+  function checkAnswer(correct, points) {
+    document.getElementById('clickSound').play();
+    if(correct){
+      score += points;
+      alert("✅ Correct! Moving forward...");
+      nextStage();
+    } else {
+      alert("❌ Oops! Try again.");
     }
+  }
 
-    loadQuestion();
-  </script>
+  function tweet() {
+    const handle = document.getElementById('handle').value || '';
+    const text = `I just completed the Zama OG Builder Journey 🧠✨\nScore: ${score}/20\nBuilding with @zama_fhe & @randhindi\n#Zama #FHE #Web3 ${handle}`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    window.open(url,'_blank');
+  }
+
+  function randomFact() {
+    const fact = facts[Math.floor(Math.random()*facts.length)];
+    document.getElementById('fact-display').innerText = fact;
+  }
+
+  function toggleDark(){
+    document.body.classList.toggle('dark');
+  }
+</script>
+
 </body>
 </html>
